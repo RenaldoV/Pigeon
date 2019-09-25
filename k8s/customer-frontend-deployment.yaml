@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-frontend-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      component: web
+      app: customer-frontend
+  template:
+    metadata:
+      labels:
+        component: web
+        app: customer-frontend
+    spec:
+      containers:
+        - name: customer-frontend
+          image: renaldekoker/pigeon_customer_frontend
+          ports:
+            - containerPort: 3000

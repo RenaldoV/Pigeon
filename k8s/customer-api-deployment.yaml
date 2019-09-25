@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-api-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      component: server
+  template:
+    metadata:
+      labels:
+        component: server
+    spec:
+      containers:
+        - name: customer-api
+          image: renaldekoker/pigeon_customer_api
+          ports:
+            - containerPort: 5000
+          env:
+            - name: DB_HOST
+              value: mongo-cluster-ip-service
+            - name: DB_USER
+              value: admin
+            - name: DB_PORT
+              value: '27017'
+            - name: DATABASE
+              value: pigeon_customers
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongopassword
+                  key: MONGO_PASSWORD

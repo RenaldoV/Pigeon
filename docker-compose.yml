@@ -1,0 +1,28 @@
+version: '3'
+services:
+  customer_api:
+    build:
+      dockerfile: Dockerfile
+      context: ./pigeon-api
+    volumes:
+      - /app/node_modules
+      - ./pigeon-api:/app
+    links:
+      - customer_database # link this service to the customer_database service
+    depends_on:
+      - "customer_database"
+    ports:
+      - "5000:5000"
+  customer_database:
+    image: mongo # specify image to build container from
+    ports:
+      - "27017:27017" # specify port forewarding
+  customer_frontend:
+    build:
+      dockerfile: Dockerfile
+      context: ./pigeon-frontend
+    volumes:
+      - /app/node_modules
+      - ./pigeon-frontend:/app
+    ports:
+      - "3000:3000"

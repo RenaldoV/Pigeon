@@ -1,0 +1,13 @@
+{
+  "pigeon_datasource": {
+    "host": "mongo-cluster-ip-service",
+    "port": 27017,
+    "url": "",
+    "database": "pigeon_customers",
+    "password": "",
+    "name": "pigeon_datasource",
+    "user": "",
+    "useNewUrlParser": true,
+    "connector": "mongodb"
+  }
+}

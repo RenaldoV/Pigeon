@@ -1,0 +1,3 @@
+# letsencryp cert manager kubernetes
+# use staging version
+# add to ingress annotations 
