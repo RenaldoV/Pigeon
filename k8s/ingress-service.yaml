@@ -18,3 +18,4 @@ spec:
               serviceName: customer-frontend-cluster-ip-service
               servicePort: 3000
           
+          
