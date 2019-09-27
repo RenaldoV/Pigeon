@@ -14,7 +14,7 @@ before_install:
   - gcloud auth activate-service-account --key-file service-account.json
   - gcloud config set project pigeon-254010
   - gcloud config set compute/zone europe-west6-a
-  - gcloud container cluster get-credentials pigeon-cluster
+  - gcloud container clusters get-credentials pigeon-cluster
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 deploy:
   provider: script
