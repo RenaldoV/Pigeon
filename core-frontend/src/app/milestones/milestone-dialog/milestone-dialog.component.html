@@ -1,0 +1,100 @@
+<mat-dialog-actions align="end">
+    <i class="fas fa-times closeBtn fa-2x" (click)="close()"></i>
+</mat-dialog-actions>
+
+<h2 mat-dialog-title class="text-center">
+  Add Milestone
+</h2>
+
+
+<mat-dialog-content [formGroup]="milestoneForm">
+  <mat-form-field class="innerFormFields col-12">
+    <input matInput placeholder="Milestone Name" formControlName="name" required>
+    <mat-error *ngIf="name.hasError('required')">
+      Milestone Name is required.
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field class="innerFormFields col-6" appearance="outline">
+    <mat-label>Email Notification Message</mat-label>
+    <textarea matInput #emailMessage
+              placeholder="Dear *contact_name* your property *property_description* has been registered at *deeds_office* please contact me *my_name* for any other queries."
+              formControlName="emailMessage" required rows="4"></textarea>
+    <mat-error>Email Message is required.</mat-error>
+  </mat-form-field>
+  <mat-form-field class="innerFormFields col-6" appearance="outline">
+      <mat-label>SMS Notification Message</mat-label>
+      <textarea matInput #smsInput
+                placeholder="Dear *contact_name* your property *property_description* has been registered at *deeds_office* please contact me *my_name* for any other queries."
+                formControlName="smsMessage" required rows="4"></textarea>
+      <mat-error>SMS Message is required.</mat-error>
+    </mat-form-field>
+  <div class="row">
+    <div class="col-6">
+        <span style="color: lightgray">Insert Placeholders</span><br>
+        <mat-chip-list>
+          <mat-chip
+            (click)="insertNoti($event, '*contact_name*','emailMessage', emailMessage); onMilestoneChange();">
+            Contact's Name
+          </mat-chip>
+          <mat-chip
+            (click)="insertNoti($event, '*my_name*', 'emailMessage', emailMessage); onMilestoneChange();">
+            My Name
+          </mat-chip>
+          <mat-chip
+            (click)="insertNoti($event, '*sec_names*', 'emailMessage', emailMessage); onMilestoneChange();">
+            Secretary name/s
+          </mat-chip>
+          <mat-chip
+            (click)="insertNoti($event, '*sec_emails*', 'emailMessage', emailMessage); onMilestoneChange();">
+            Secretary email/s
+          </mat-chip>
+          <mat-chip
+            (click)="insertNoti($event, '*file_ref*', 'emailMessage', emailMessage); onMilestoneChange();">
+            Task Reference
+          </mat-chip>
+        </mat-chip-list>
+    </div>
+    <div class="col-6">
+      <span style="color: lightgray">Insert Placeholders</span><br>
+      <mat-chip-list>
+        <mat-chip
+          (click)="insertNoti($event, '*contact_name*','smsMessage', smsInput); onMilestoneChange();">
+          Contact's Name
+        </mat-chip>
+        <mat-chip
+          (click)="insertNoti($event, '*my_name*', 'smsMessage', smsInput); onMilestoneChange();">
+          My Name
+        </mat-chip>
+        <mat-chip
+          (click)="insertNoti($event, '*sec_names*', 'smsMessage', smsInput); onMilestoneChange();">
+          Secretary name/s
+        </mat-chip>
+        <mat-chip
+          (click)="insertNoti($event, '*sec_emails*', 'smsMessage', smsInput); onMilestoneChange();">
+          Secretary email/s
+        </mat-chip>
+        <mat-chip
+          (click)="insertNoti($event, '*file_ref*', 'smsMessage', smsInput); onMilestoneChange();">
+          Task Reference
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+  </div>
+  <div class="col-12">
+    <mat-checkbox (change)="onMilestoneChange();" formControlName="sendEmail">
+      Email to all parties</mat-checkbox>
+  </div>
+  <div class="col-12">
+    <mat-checkbox (change)="onMilestoneChange();" formControlName="sendSMS">
+      SMS to all parties</mat-checkbox>
+  </div>
+  <div class="col-12">
+    <mat-checkbox (change)="onMilestoneChange();" formControlName="alwaysAsk">
+      Always Ask</mat-checkbox>
+  </div>
+</mat-dialog-content>
+
+
+<mat-dialog-actions align="end">
+    <button class="btn btn-primary btn-sm" (click)="save()">Add Milestone</button>
+</mat-dialog-actions>

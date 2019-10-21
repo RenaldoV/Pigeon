@@ -1,0 +1,62 @@
+<h2 mat-dialog-title>
+  {{existing ? 'Update User' : 'Add New User'}}
+</h2>
+
+<mat-dialog-content [formGroup]="userForm">
+  <div style="margin-bottom: 10px;">
+    <mat-form-field class="innerFormFields">
+      <input matInput placeholder="Name" formControlName="name" required>
+      <mat-error>
+        User name is required.
+      </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="innerFormFields">
+      <input matInput placeholder="Surname" formControlName="surname" required>
+      <mat-error>
+        User surname is required.
+      </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="innerFormFields">
+      <input matInput placeholder="Cell number" formControlName="cell">
+      <mat-error *ngIf="cell.hasError('length')">
+        A valid cell must be 10 digits long.
+      </mat-error>
+      <mat-error *ngIf="cell.hasError('numbers')">
+        A valid cell must consist of only numbers.
+      </mat-error>
+      <mat-error *ngIf="cell.hasError('firstZero')">
+        A valid cell must start with a 0.
+      </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="innerFormFields">
+      <input (keyup)="onEmailChange()" type="email" matInput placeholder="Email address" formControlName="email">
+      <mat-error *ngIf="email.hasError('required')">
+        Email address is required.
+      </mat-error>
+      <mat-error *ngIf="email.hasError('invalidEmail')">
+        Email must be a valid email address.
+      </mat-error>
+      <mat-error *ngIf="email.hasError('emailNotUnique')">
+        You already have a user with this email.
+      </mat-error>
+    </mat-form-field>
+    <br>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="btn btn-outline-secondary btn-sm closeBtn"(click)="close()">Close</button>
+  <button *ngIf="!existing" [disabled]="userForm.invalid || (loaderService.isLoading | async)"
+          class="btn btn-primary btn-sm" (click)="submitUser()">
+    <span *ngIf="!(loaderService.isLoading | async)"><i class="far fa-save"></i> Add Contact</span>
+    <i *ngIf="loaderService.isLoading | async" class="fas fa-spinner fa-spin"></i>
+  </button>
+  <button *ngIf="existing" [disabled]="userForm.invalid || (loaderService.isLoading | async)"
+          class="btn btn-primary btn-sm" (click)="updateUser()">
+    <span *ngIf="!(loaderService.isLoading | async)"><i class="far fa-save"></i> Save</span>
+    <i *ngIf="loaderService.isLoading | async" class="fas fa-spinner fa-spin"></i>
+  </button>
+</mat-dialog-actions>

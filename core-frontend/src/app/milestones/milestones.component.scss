@@ -1,0 +1,118 @@
+.fa-plus-circle {
+  margin-left: 50%;
+}
+
+.container {
+  margin-top: 20px;
+}
+
+mat-chip {
+  cursor: pointer;
+}
+
+.list-container {
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.contact-box {
+  background-color: #F5F5F5;
+  border-radius: 5px;
+  width: 95%;
+  margin: 5px;
+  padding: 10px 0 10px 0;
+}
+
+.example-headers-align .mat-expansion-panel-header-title,
+.example-headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+mat-accordion .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.MilestoneListForm {
+  width: 100%;
+  align-content: center;
+}
+
+.msListPanel {
+  background-color: #f3f3f3;
+}
+.msListPanel mat-expansion-panel-header {
+  background-color: #e3e3e3;
+}
+
+.msPanel mat-expansion-panel-header {
+  background-color: #c1c1c1;
+}
+
+.deleteBtn {
+  color: red;
+  cursor: pointer;
+  z-index: 100;
+}
+
+.innerFormFields {
+  margin-top: 5px;
+  width: 100%;
+}
+
+mat-expansion-panel.msPanel mat-expansion-panel-header.mat-expanded[style] {
+  transition: all 0.5s;
+}
+
+.placeholderButtons button.btn.btn-outline-secondary.btn-sm {
+  font-size: 12px!important;
+  padding: .15rem .3rem;
+}
+
+.propertiesPanelBody {
+  padding-top: 10px;
+}
+
+mat-panel-title.mTitle {
+  width: 90%;
+}
+mat-card-title {
+  font-size: 14px!important;
+}
+mat-card-title i.far {
+  color: #2476A7!important;
+}
+mat-card-subtitle i.fas {
+  color: #2476A7!important;
+}
+.fa-ellipsis-h {
+  cursor: pointer;
+  float: right;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
+
+
+
+
+
+

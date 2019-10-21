@@ -1,0 +1,25 @@
+<div id="sidebar" class="sidebar" [ngClass]="{'collapsed' : collapsed}" >
+  <div class="button" id="closer" matTooltip="toggle sidebar ["  (click)="toggleSidebar()">
+    <i *ngIf="collapsed"  class="fas fa-chevron-right toggle-icon"></i>
+    <i *ngIf="!collapsed"  class="fas fa-chevron-left toggle-icon"></i>
+  </div>
+
+  <div class="nav-container">
+    <div class="nav-item" *ngFor="let panel of config.panels">
+      <div class="nav-item-content"
+        [ngClass]="{'text-center': collapsed, 'activated' : panel.activated}"
+        matTooltip="{{ panel.description }}" [routerLink]="panel.route" routerLinkActive="active">
+          <span class="icon"><i [ngClass]="panel.icon" [class.collapsed]="collapsed"></i></span>
+          <span *ngIf="!collapsed" class="title">{{ panel.name }}</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="content">
+  <app-nav></app-nav>
+  <router-outlet></router-outlet>
+</div>
+
+

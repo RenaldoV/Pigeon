@@ -1,0 +1,73 @@
+<mat-dialog-actions align="end">
+    <i class="fas fa-times closeBtn fa-2x" (click)="close()"></i>
+</mat-dialog-actions>
+
+<h2 mat-dialog-title class="text-center">
+  New Milestone List
+</h2>
+
+
+<mat-dialog-content>
+<mat-horizontal-stepper #stepper [linear]="true">
+  <mat-step [stepControl]="MLForm">
+    <form [formGroup]="MLForm">
+      <ng-template matStepLabel>Milestone List Details</ng-template>
+      <div class="row">
+        <div class="col-sm-12 col-md-8 offset-md-2">
+          <mat-form-field>
+            <input matInput placeholder="Milestone List Title" formControlName="title" required>
+            <mat-error *ngIf="title.hasError('required')">
+              Title is required.
+            </mat-error>
+          </mat-form-field><br>
+          <mat-form-field>
+            <textarea matInput placeholder="Describe the Milestone List" formControlName="description"></textarea>
+          </mat-form-field><br>
+        </div>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Add Milestones</ng-template>
+    <h4 class="text-center">Add a milestone to a <span class="primary-highlight">{{title.value}}</span></h4>
+    <i class="fas fa-plus-circle fa-2x fa-button" (click)="addMilestone()"></i>
+    <br>
+    <br>
+
+    <div [sortablejs]="milestones" [sortablejsOptions]="options">
+      <div draggable
+        (dragstart)="started($event)"
+        (dragend)="ended()"
+        *ngFor="let m of milestones; let i = index">
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="custom-header">
+            <mat-panel-title>
+                <i class="fas fa-grip-lines"></i> {{m.name}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="row">
+            <div class="col-12 previewMsData">
+              SMS: <i class="fas fa-{{m.sendSMS ? 'check': 'times'}}"></i><br>
+              <small>{{m.smsMessage}}</small>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-12 previewMsData">
+              Email: <i class="fas fa-{{m.sendEmail ? 'check': 'times'}}"></i><br>
+              <small>{{m.emailMessage}}</small>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </div>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
+</mat-dialog-content>
+
+
+
+<mat-dialog-actions align="end">
+  <button class="btn btn-primary btn-sm" *ngIf="hasPrevious(stepper)" (click)="goBack(stepper)">Previous</button>
+  <button class="btn btn-primary btn-sm" (click)="stepNext(stepper)">{{matCurrentStep(stepper)}}</button>
+</mat-dialog-actions>

@@ -1,0 +1,179 @@
+<div class="container milestones-container">
+  <div class="milestone-widget widget col-8 offset-2">
+    <h2>Milestone lists are templates that define how a process is executed.</h2>
+    <br>
+    <h4 class="text-center">Add New Milestone List</h4>
+    <i class="fas fa-plus-circle fa-2x fa-button" (click)="addML()"></i>
+    <br>
+    <br>
+    <mat-accordion>
+        <div class="row">
+          <div class="col-12" style="margin-bottom: 10px;">
+            <form class="MilestoneListForm" [formGroup]="MilestoneListForm">
+              <mat-accordion>
+                <mat-expansion-panel hideToggle class="msListPanel" formArrayName="list"
+                                      *ngFor="let l of list.controls; let i = index" [expanded]="i + 1 === list.length">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      {{ l.get('title').value ? l.get('title').value : 'List ' + (i + 1) }}
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      {{ getMilestones(i).length }} Milestones
+                      <i class="fas fa-trash-alt float-right deleteBtn"
+                          (click)="removeMilestoneList($event, i)"></i>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <div [formGroupName]="i" (change)="onListChange(i)">
+                    <mat-form-field class="innerFormFields">
+                      <input matInput placeholder="List title" formControlName="title" required>
+                      <mat-error *ngIf="l.get('title').hasError('required')">
+                        List title is required.
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-accordion>
+                      <mat-expansion-panel hideToggle class="msPanel" formArrayName="milestones"
+                                          *ngFor="let m of getMilestones(i).controls; let k = index" [expanded]="k + 1 === getMilestones(i).length">
+                      <mat-expansion-panel-header>
+                        <mat-panel-title class="mTitle">
+                          {{ m.get('name').value ? m.get('name').value : 'Milestone' }}
+                        </mat-panel-title>
+                        <mat-panel-description>
+                          <span class="mTitle">{{ m.get('number').value }}</span>
+                          <div class="mCheck">
+                            <i class="fas fa-trash-alt float-right deleteBtn" *ngIf="getMilestones(i).length > 1"
+                                (click)="removeMilestone($event, i, k)"></i>
+                          </div>
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <div class="row" [formGroupName]="k" (change)="onMilestoneChange(i , k)">
+                        <mat-form-field class="innerFormFields col-8">
+                          <input matInput placeholder="Milestone Name" formControlName="name" required>
+                          <mat-error *ngIf="m.get('name').hasError('required')">
+                            Milestone Name is required.
+                          </mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="innerFormFields col-4">
+                          <input matInput type="number" placeholder="Milestone Number" formControlName="number" required>
+                          <mat-error>Milestone number is required</mat-error>
+                        </mat-form-field>
+                        <mat-form-field class="innerFormFields col-12" appearance="outline">
+                          <mat-label>Email Notification Message</mat-label>
+                          <textarea matInput #emailMessage
+                                    placeholder="Dear *contact_name* your property *property_description* has been registered at *deeds_office* please contact me *my_name* for any other queries."
+                                    formControlName="emailMessage" required rows="4"></textarea>
+                          <mat-error>Email Message is required.</mat-error>
+                        </mat-form-field>
+                        <div class="col-12">
+                          <span style="color: lightgray">Insert Placeholders</span><br>
+                          <mat-chip-list>
+                            <mat-chip
+                              (click)="insertNoti($event, i, k, '*contact_name*','emailMessage', emailMessage); onMilestoneChange(i,k); onListChange(i)">
+                              Contact's Name
+                            </mat-chip>
+                            <mat-chip
+                              (click)="insertNoti($event, i, k, '*property_description*', 'emailMessage', emailMessage); onMilestoneChange(i,k); onListChange(i)">
+                              Prop Description
+                            </mat-chip>
+                            <mat-chip
+                              (click)="insertNoti($event, i, k, '*deeds_office*', 'emailMessage', emailMessage); onMilestoneChange(i,k); onListChange(i)">
+                              Deeds Office
+                            </mat-chip>
+                            <mat-chip
+                              (click)="insertNoti($event, i, k, '*my_name*', 'emailMessage', emailMessage); onMilestoneChange(i,k); onListChange(i)">
+                              My Name
+                            </mat-chip>
+                            <mat-chip
+                              (click)="insertNoti($event, i, k, '*sec_names*', 'emailMessage', emailMessage); onMilestoneChange(i,k); onListChange(i)">
+                              Secretary name/s
+                            </mat-chip>
+                            <mat-chip
+                              (click)="insertNoti($event, i, k, '*sec_emails*', 'emailMessage', emailMessage); onMilestoneChange(i,k); onListChange(i)">
+                              Secretary email/s
+                            </mat-chip>
+                            <mat-chip
+                              (click)="insertNoti($event, i, k, '*file_ref*', 'emailMessage', emailMessage); onMilestoneChange(i,k); onListChange(i)">
+                              File Reference
+                            </mat-chip>
+                            <mat-chip
+                              (click)="insertNoti($event, i, k, '*bank*', 'emailMessage', emailMessage); onMilestoneChange(i,k); onListChange(i)">
+                              Bank
+                            </mat-chip>
+                          </mat-chip-list>
+                        </div>
+                        <mat-form-field class="innerFormFields col-12" appearance="outline">
+                          <mat-label>SMS Notification Message</mat-label>
+                          <textarea matInput #smsInput
+                                    placeholder="Dear *contact_name* your property *property_description* has been registered at *deeds_office* please contact me *my_name* for any other queries."
+                                    formControlName="smsMessage" required rows="4"></textarea>
+                          <mat-error>SMS Message is required.</mat-error>
+                        </mat-form-field>
+                        <div class="col-12">
+                          <span style="color: lightgray">Insert Placeholders</span><br>
+                          <mat-chip-list>
+                            <mat-chip
+                              (click)="insertNoti($event, i, k, '*contact_name*','smsMessage', smsInput); onMilestoneChange(i,k); onListChange(i)">
+                              Contact's Name
+                            </mat-chip>
+                            <mat-chip
+                              (click)="insertNoti($event, i, k, '*property_description*', 'smsMessage', smsInput); onMilestoneChange(i,k); onListChange(i)">
+                              Prop Description
+                            </mat-chip>
+                            <mat-chip
+                              (click)="insertNoti($event, i, k, '*deeds_office*', 'smsMessage', smsInput); onMilestoneChange(i,k); onListChange(i)">
+                              Deeds Office
+                            </mat-chip>
+                            <mat-chip
+                              (click)="insertNoti($event, i, k, '*my_name*', 'smsMessage', smsInput); onMilestoneChange(i,k); onListChange(i)">
+                              My Name
+                            </mat-chip>
+                            <mat-chip
+                              (click)="insertNoti($event, i, k, '*sec_names*', 'smsMessage', smsInput); onMilestoneChange(i,k); onListChange(i)">
+                              Secretary name/s
+                            </mat-chip>
+                            <mat-chip
+                              (click)="insertNoti($event, i, k, '*sec_emails*', 'smsMessage', smsInput); onMilestoneChange(i,k); onListChange(i)">
+                              Secretary email/s
+                            </mat-chip>
+                            <mat-chip
+                              (click)="insertNoti($event, i, k, '*file_ref*', 'smsMessage', smsInput); onMilestoneChange(i,k); onListChange(i)">
+                              File Reference
+                            </mat-chip>
+                            <mat-chip
+                              (click)="insertNoti($event, i, k, '*bank*', 'smsMessage', smsInput); onMilestoneChange(i,k); onListChange(i)">
+                              Bank
+                            </mat-chip>
+                          </mat-chip-list>
+                        </div>
+                        <div class="col-12">
+                          <mat-checkbox (change)="onMilestoneChange(i, k); onListChange(i)" formControlName="sendEmail">
+                            Email to all parties</mat-checkbox>
+                        </div>
+                        <div class="col-12">
+                          <mat-checkbox (change)="onMilestoneChange(i, k); onListChange(i)" formControlName="sendSMS">
+                            SMS to all parties</mat-checkbox>
+                        </div>
+                        <div class="col-12">
+                          <mat-checkbox (change)="onMilestoneChange(i, k); onListChange(i)" formControlName="alwaysAsk">
+                            Always Ask</mat-checkbox>
+                        </div>
+                      </div>
+                    </mat-expansion-panel>
+                    </mat-accordion>
+                  </div>
+                  <div class="btn-group" role="group" aria-label="action buttons" style="margin-top: 5px;">
+                    <button (click)="addMilestone(i)" class="btn btn-outline-secondary btn-sm" color="primary"
+                              [disabled]="!(l.get('title').valid && MilestoneListForm.valid)"><i class="fas fa-plus"></i> Add Milestone
+                    </button>
+                    <button class="btn btn-primary btn-sm saveButton" color="primary" [disabled]="!MilestoneListForm.valid" (click)="submitMilestones(i)">
+                      <span *ngIf="!(loaderService.isLoading | async)"><i class="far fa-save"></i> Save</span>
+                      <i *ngIf="loaderService.isLoading | async" class="fas fa-spinner fa-spin"></i>
+                    </button>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </form>
+          </div>
+        </div>
+    </mat-accordion>
+  </div>
+</div>

@@ -1,0 +1,79 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import 'nav-theme.scss';
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$md-pigeon-pallete: (
+    50 : #e4e5e7,
+    100 : #bbbfc4,
+    200 : #8d949c,
+    300 : #5f6974,
+    400 : #3d4957,
+    500 : #1b2939,
+    600 : #182433,
+    700 : #141f2c,
+    800 : #101924,
+    900 : #080f17,
+    A100 : #589bff,
+    A200 : #257cff,
+    A400 : #0061f1,
+    A700 : #0056d8,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #ffffff,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+$core-frontend-primary: mat-palette($md-pigeon-pallete);
+$core-frontend-accent: mat-palette($md-pigeon-pallete, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$core-frontend-warn: mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$core-frontend-theme: mat-light-theme($core-frontend-primary, $core-frontend-accent, $core-frontend-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($core-frontend-theme);
+@include nav-theme($core-frontend-theme);
+/* You can add global styles to this file, and also import other style files */
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.button {
+  cursor: pointer;
+}
+
+.widget {
+  box-shadow: 0px 0px 6px 0 rgba(0, 0, 0, 0.12);
+  padding: 20px;
+  border-radius: 5px;
+}

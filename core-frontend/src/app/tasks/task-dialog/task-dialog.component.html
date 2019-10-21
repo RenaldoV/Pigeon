@@ -1,0 +1,223 @@
+<mat-dialog-actions align="end">
+      <i class="fas fa-times closeBtn fa-2x" (click)="close()"></i>
+</mat-dialog-actions>
+
+<h2 mat-dialog-title class="text-center">
+  {{existing ? 'Update Task' : 'Add New Task'}}
+</h2>
+
+
+<mat-dialog-content>
+  <mat-horizontal-stepper #stepper [linear]="true">
+    <mat-step [stepControl]="taskForm">
+      <form [formGroup]="taskForm">
+        <ng-template matStepLabel>Task Details</ng-template>
+        <div class="row">
+          <div class="col-sm-12 col-md-8 offset-md-2">
+            <mat-form-field>
+            <input matInput placeholder="Our Task Reference" formControlName="taskRef" required>
+            <mat-error *ngIf="taskRef.hasError('required')">
+              Task Reference is required.
+            </mat-error>
+          </mat-form-field><br>
+            <!--<mat-form-field>
+              <input matInput placeholder="Cause of action" formControlName="action" [matAutocomplete]="actions" required>
+              <mat-error *ngIf="action.hasError('required')">
+                Action Type is required.
+              </mat-error>
+              <mat-autocomplete #actions="matAutocomplete" (optionSelected)="actionTypeSelected($event.option)">
+                <mat-option *ngFor="let action of filteredActions | async" [value]="action">
+                  {{ action }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field><br>-->
+            <mat-form-field class="example-chip-list">
+              <mat-chip-list #chipList ngDefaultControl [errorStateMatcher]="matcher" [formControl]="secChips">
+                <mat-chip
+                  *ngFor="let sec of secretaries"
+                  [selectable]="selectable"
+                  [removable]="removable"
+                  (removed)="remove(sec)">
+                  {{sec.name}}
+                  <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                </mat-chip>
+                <input
+                  placeholder="Users to collaborate *"
+                  #secInput
+                  #secTrigger="matAutocompleteTrigger"
+                  formControlName="refUser"
+                  (focus)="onFocus()"
+                  (click)="onFocus()"
+                  [matAutocomplete]="auto"
+                  [matChipInputFor]="chipList"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+                <span *ngIf="loaderService.isLoading | async" matSuffix>
+                  <i class="fas fa-spinner fa-spin"></i>
+                </span>
+              </mat-chip-list>
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                <mat-option *ngFor="let sec of filteredSecretaries | async" [value]="sec._id">
+                  {{sec.name}}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error>Select at least one secretary as a reference.</mat-error>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-select (valueChange)="milestoneListSelected($event)" placeholder="Milestone Process" [formControl]="milestoneList" required>
+                <mat-option *ngFor="let ml of milestonesLists" [value]="ml._id">
+                  {{ml.title}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="milestoneList.hasError('required')">
+                Milestone Process is required.
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field *ngIf="isBond()">
+              <mat-select formControlName="bank" placeholder="Choose Bank" required>
+                <mat-option value="First National Bank">First National Bank</mat-option>
+                <mat-option value="ABSA">ABSA</mat-option>
+                <mat-option value="African Bank">African Bank</mat-option>
+                <mat-option value="Capitec">Capitec</mat-option>
+                <mat-option value="Nedbank">Nedbank</mat-option>
+                <mat-option value="Standard Bank">Standard Bank</mat-option>
+                <mat-option value="Bidvest Bank">Bidvest Bank</mat-option>
+              </mat-select>
+              <mat-error>
+                You are required to choose a bank.
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="descriptionForm">
+      <form [formGroup]="descriptionForm">
+        <ng-template matStepLabel>Task Description</ng-template>
+        <div class="row">
+          <div class="col-sm-12 col-md-8 offset-md-2">
+            <mat-form-field>
+              <textarea matInput placeholder="Describe the task" formControlName="taskDescription" required></textarea>
+              <mat-error *ngIf="taskDescription.hasError('required')">
+                Task Description is required.
+              </mat-error>
+            </mat-form-field><br>
+          </div>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Add Contacts</ng-template>
+      <div class="row contactsRow">
+        <div class="col-sm-12 col-md-6 fileCol dropBox">
+          <div class="contactHeaders">
+            <h5>File Contacts</h5>
+          </div>
+          <div
+            cdkDropList
+            #fileContactListElement="cdkDropList"
+            [cdkDropListData]="fileContactsList"
+            [cdkDropListConnectedTo]="[myContactsElement]"
+            class="example-list"
+            (cdkDropListDropped)="drop($event)">
+            <div class="hint" *ngIf="fileContactsList.length === 0" style="color: gray">Drag and drop at least one contact here to add them to the file</div>
+            <div class="example-box" *ngFor="let ct of fileContactsList" cdkDrag>
+              <div class="row">
+                <div class="col-12">
+                  <span style="font-weight: bold"><i class="far fa-id-card"></i> {{ct?.name + ' ' + ct?.surname}}</span>
+                </div>
+                <div class="col-8">
+                  <small *ngIf="ct.email" style="color: darkgray"><i class="far fa-envelope"></i> {{ct?.email}}</small>
+                  <small *ngIf="!ct.email && ct.cell" style="color: darkgray"><i class="fas fa-phone-square"></i> {{ ct?.cell }}</small>
+                </div>
+                <div class="col-4">
+                  <small style="color: darkgray">| <i class="fas fa-user-friends"></i> {{ct?.type}}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-6 contactsCol dropBox">
+          <div class="contactHeaders">
+            <h5>My Contacts</h5>
+            <mat-form-field>
+              <input matInput placeholder="Search My Contacts"
+                     (keyup)="searchTerm$.next($event.target.value)">
+              <span matPrefix><i class="fas fa-search"></i>&nbsp;</span>
+            </mat-form-field>
+          </div>
+          <div
+            cdkDropList
+            #myContactsElement="cdkDropList"
+            [cdkDropListData]="filteredContacts"
+            [cdkDropListConnectedTo]="[fileContactListElement]"
+            class="example-list"
+            (cdkDropListDropped)="drop($event)">
+            <div class="hint" *ngIf="filteredContacts.length === 0" style="color: gray">No contacts match your search.</div>
+            <div class="example-box" *ngFor="let ct of filteredContacts" cdkDrag>
+              <div class="row">
+                <div class="col-12">
+                  <span style="font-weight: bold"><i class="far fa-id-card"></i> {{ct?.name + ' ' + ct?.surname}}</span>
+                </div>
+                <div class="col-8">
+                  <small *ngIf="ct.email" style="color: darkgray"><i class="far fa-envelope"></i> {{ct?.email}}</small>
+                  <small *ngIf="!ct.email && ct.cell" style="color: darkgray"><i class="fas fa-phone-square"></i> {{ ct?.cell }}</small>
+                </div>
+                <div class="col-4">
+                  <small style="color: darkgray">| <i class="fas fa-user-friends"></i> {{ct?.type}}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 10px;">
+        <button style="margin-right: 5px;" class="btn btn-outline-secondary btn-sm" (click)="createNewContactDialog()"><i class="fas fa-plus"></i> Add New Contact</button>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Add Entity</ng-template>
+      <div class="row">
+        <div class="col-sm-12 col-md-8 offset-md-2">
+          <mat-form-field class="example-chip-list innerFormFields">
+            <mat-chip-list #enChipList ngDefaultControl [errorStateMatcher]="matcher" [formControl]="entityChips">
+              <mat-chip
+                *ngFor="let en of selectedEntity"
+                [selectable]="selectable"
+                [removable]="removable"
+                (removed)="removeEntity(en)">
+                {{en.name}}
+                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+              </mat-chip>
+              <input
+                placeholder="Associate an Entity with this file"
+                #entityInput
+                #enTrigger="matAutocompleteTrigger"
+                [formControl]="entity"
+                (focus)="onEnFocus()"
+                (click)="onEnFocus()"
+                [matAutocomplete]="enAuto"
+                [matChipInputFor]="enChipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+              <span *ngIf="loaderService.isLoading | async" matSuffix>
+                        <i class="fas fa-spinner fa-spin"></i>
+                      </span>
+            </mat-chip-list>
+            <mat-autocomplete #enAuto="matAutocomplete" (optionSelected)="selectEntity($event)">
+              <mat-option *ngFor="let en of filteredEntities | async" [value]="en._id">
+                {{en.name}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</mat-dialog-content>
+
+
+
+<mat-dialog-actions align="end">
+  <button *ngIf="isContactStep(stepper)"  style="margin-right: 5px;" class="btn btn-outline-secondary btn-sm" (click)="createNewContactDialog()"><i class="fas fa-plus"></i> Add New Contact</button>
+  <button class="btn btn-primary btn-sm" *ngIf="hasPrevious(stepper)" (click)="goBack(stepper)">Previous</button>
+  <button class="btn btn-primary btn-sm" (click)="stepNext(stepper)">{{matCurrentStep(stepper)}}</button>
+</mat-dialog-actions>

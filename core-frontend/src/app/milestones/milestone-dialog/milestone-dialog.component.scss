@@ -1,0 +1,38 @@
+.closeBtn {
+  cursor: pointer;
+  margin-top: -40px;
+  color: grey;
+}
+
+.closeBtn:hover {
+  color: black;
+  animation-name: spin;
+  animation: spin 0.5s;
+}
+
+mat-form-field {
+  width: 100%
+}
+
+.btn {
+  margin-right: 5px;
+}
+
+@keyframes spin {
+  0% {
+  -webkit-transform: rotate(0deg);
+  transform: rotate(0deg);
+  }
+  100% {
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
+  }
+}
+
+mat-horizontal-stepper {
+  background-color: #F5F5F5;
+}
+
+.fa-plus-circle {
+  margin-left: 50%;
+}

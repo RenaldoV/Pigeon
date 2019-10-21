@@ -1,0 +1,63 @@
+// Import library functions for theme creation.
+@import '~@angular/material/theming';
+
+// Define a mixin that accepts a theme and outputs the theme-specific styles.
+@mixin nav-theme($theme) {
+  // Extract the palettes you need from the theme definition.
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+  $warning: map-get($theme, warn);
+
+  // Define any styles affected by the theme.
+  .sidebar {
+    .button {
+      background-color: mat-color($accent, A400);
+    }
+    .nav-item-content:hover, .nav-item-content.active {
+      background-color: mat-color($primary, 700);
+    }
+    // Use mat-color to extract individual colors from a palette.
+    background-color: mat-color($primary, 500);
+    color: mat-color($primary, '500-contrast');
+  }
+  .fa-button {
+    transition: 0.3s;
+    color: mat-color($accent, A400);
+  }
+  .fa-button:hover {
+    font-size: 38px;
+    cursor: pointer;
+    transition: 0.3s;
+    color: mat-color($accent, A200);
+  }
+  .navbar {
+    background-color: mat-color($primary, 50);
+    color: mat-color($primary, '50-contrast');
+    a {
+      color: mat-color($primary, '50-contrast');
+    }
+    .nav-item:hover {
+      background-color: mat-color($primary, 100);
+    }
+  }
+  .primary-highlight {
+    color: mat-color($accent, A700);
+  }
+  .fa-check {
+    color: mat-color($accent, A400);
+  }
+  .fa-times {
+    color: mat-color($warning);
+  }
+
+}
+
+@mixin nav-typography($config) {
+  .sidebar {
+    font: {
+      family: 'Ubuntu', sans-serif;
+      size: mat-font-size($config, body-1);
+      weight: mat-font-weight($config, body-1);
+    }
+  }
+}
